@@ -59,3 +59,90 @@ Se validó el endpoint de salud expuesto por la aplicación: curl -s http://loca
 El sistema presenta vulnerabilidades críticas de seguridad como SQL Injection, uso de hashing inseguro (MD5) y exposición de datos sensibles.  
 También se identifican malas prácticas relacionadas con encapsulación, manejo de recursos y principios de Clean Code.  
 Se recomienda refactorización prioritaria enfocada en seguridad y aplicación de principios SOLID.
+
+---
+
+🧪 FASE 3 — Pruebas Funcionales
+
+Se realizaron pruebas manuales enviando solicitudes HTTP mediante curl contra la API levantada en http://localhost:8080.
+
+🔎 Prueba 1 — Login válido
+
+Comando ejecutado: curl -i -X POST "http://localhost:8080/login?u=admin&p=12345"
+Resultado obtenido:
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+...
+{"timestamp":"2026-02-26T06:34:35.474+00:00","status":500,"error":"Internal Server Error","path":"/login"}
+
+Análisis:
+
+El endpoint existe, pero se produce un error interno (500).
+
+No se retornan datos del usuario.
+
+El sistema no maneja adecuadamente el error.
+
+En producción, los errores deberían manejarse con mensajes controlados y sin exponer información interna.
+
+Conclusión:
+
+El login no funciona correctamente debido a un error interno del servidor, lo que indica posibles problemas de conexión a base de datos o manejo de excepciones.
+
+🔎 Prueba 2 — Intento de SQL Injection
+
+Comando ejecutado: curl -i -X POST "http://localhost:8080/login?u=admin'--&p=cualquiercosa"
+
+Resultado obtenido:
+HTTP/1.1 500 Internal Server Error
+...
+Análisis:
+
+Se intentó manipular la consulta SQL utilizando admin'--.
+Esto busca comentar el resto de la sentencia SQL y omitir la validación de contraseña.
+El sistema no valida ni sanitiza correctamente los parámetros.
+Si la consulta estuviera construida dinámicamente sin prepared statements, podría permitir acceso no autorizado.
+
+Riesgo en producción:
+
+Acceso indebido a cuentas.
+Exposición o manipulación de datos.
+Escalada de privilegios.
+Compromiso total del sistema.
+
+🔎 Prueba 3 — Registro con contraseña débil
+Caso 1 — Contraseña muy corta: curl -i -X POST "http://localhost:8080/register?u=test&p=123&e=test@test.com"
+
+Caso 2 — Contraseña ligeramente mayor: curl -i -X POST "http://localhost:8080/register?u=test2&p=1234&e=test2@test.com"
+
+Análisis:
+Se evaluó si el sistema rechaza contraseñas débiles.
+La validación aplicada parece basarse únicamente en longitud mínima.
+No se verifican criterios de seguridad como:
+Uso de mayúsculas
+Uso de números
+Uso de caracteres especiales
+Complejidad mínima
+Hash seguro de la contraseña
+
+Conclusión:
+La validación actual no es suficiente para un entorno productivo.
+Se recomienda implementar:
+
+Políticas de complejidad de contraseña.
+Hash seguro (BCrypt o similar).
+Validaciones de email.
+Mensajes de error controlados.
+
+
+🛡 Conclusión General FASE 3
+
+Las pruebas funcionales evidencian:
+Manejo inadecuado de errores (HTTP 500).
+Posible vulnerabilidad a SQL Injection.
+Validación insuficiente de contraseñas.
+Falta de controles de seguridad robustos.
+
+El sistema presenta debilidades que lo hacen inseguro para un entorno productivo sin mejoras adicionales.
+
+
