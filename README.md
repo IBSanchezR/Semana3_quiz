@@ -1,10 +1,12 @@
-📦 Semana 3 — Auditoría de Clean Code y Seguridad + ADR
-🎯 Objetivo
+# 📦 Semana 3 — Auditoría de Clean Code y Seguridad + ADR
+## 🎯 Objetivo
 
 Identificar violaciones a principios de Clean Code y buenas prácticas de seguridad en un sistema heredado, y documentar decisiones de refactorización mediante un Architecture Decision Record (ADR).
 
-🧪 FASE 1 — Levantamiento del Entorno
-🖥️ Entorno de Ejecución
+---
+
+# 🧪 FASE 1 — Levantamiento del Entorno
+## 🖥️ Entorno de Ejecución
 | Componente        | Versión             |
 | ----------------- | ------------------- |
 | Sistema Operativo | Ubuntu 24.04 (WSL2) |
@@ -15,7 +17,9 @@ Identificar violaciones a principios de Clean Code y buenas prácticas de seguri
 
 El entorno se ejecuta sobre Windows utilizando WSL2 para garantizar compatibilidad con contenedores Linux y reproducibilidad del entorno de desarrollo.
 
-🚀 Proceso de Levantamiento
+---
+
+## 🚀 Proceso de Levantamiento
 
 Desde la raíz del proyecto se ejecutó: docker compose up --build
 
@@ -36,9 +40,8 @@ Se validó el endpoint de salud expuesto por la aplicación: curl -s http://loca
 
 ---
 
-🔍 FASE 2 — Auditoría del Código
-
-📋 Tabla de Hallazgos
+# 🔍 FASE 2 — Auditoría del Código
+## 📋 Tabla de Hallazgos
 
 | # | Descripción técnica del hallazgo | Archivo | Línea aprox. | Principio violado | Nivel |
 |---|----------------------------------|---------|-------------|-------------------|-------|
