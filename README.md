@@ -32,3 +32,30 @@ db → PostgreSQL (puerto 5432)
 Se validó el endpoint de salud expuesto por la aplicación: curl -s http://localhost:8080/health
 
 ✅ Resultado obtenido: {"ok": true} 
+
+
+---
+
+🔍 FASE 2 — Auditoría del Código
+
+📋 Tabla de Hallazgos
+
+| # | Descripción técnica del hallazgo | Archivo | Línea aprox. | Principio violado | Nivel |
+|---|----------------------------------|---------|-------------|-------------------|-------|
+| 1 | Construcción dinámica de consulta SQL mediante concatenación de input (`username = '" + u + "'"`). Permite SQL Injection. | repository/UserRepository.java | 18–22 | Seguridad (SQL Injection) | Alto |
+| 2 | Inserción SQL vulnerable por concatenación directa de atributos del objeto `User`. | repository/UserRepository.java | 31–37 | Seguridad (SQL Injection) | Alto |
+| 3 | Credenciales de base de datos hardcodeadas (`admin/admin123`). | repository/UserRepository.java | 10–14 | Seguridad (exposición de secretos) | Alto |
+| 4 | Uso de MD5 para hash de contraseñas. Algoritmo inseguro. | service/AuthService.java | 60–73 | Seguridad (hashing débil) | Alto |
+| 5 | Exposición del hash en la respuesta (`res.put("hash", hp)`). | service/AuthService.java | 25 y 33 | Seguridad (exposición de datos) | Alto |
+| 6 | Campos públicos en modelo `User`. Falta encapsulación. | model/User.java | 3–7 | Clean Code / Encapsulación | Medio |
+| 7 | Naming poco descriptivo (`u`, `p`, `e`, `s`, `r`). | controller/AuthController.java | varios | Clean Code (Naming) | Medio |
+| 8 | No se cierran recursos JDBC (`Connection`, `Statement`, `ResultSet`). | repository/UserRepository.java | 16–29 | Clean Code (manejo de recursos) | Medio/Alto |
+| 9 | Validación débil de contraseña (`p.length() > 3`). | service/AuthService.java | 46–52 | Seguridad (validación insuficiente) | Medio |
+
+---
+
+ 📌 Conclusión de Auditoría
+
+El sistema presenta vulnerabilidades críticas de seguridad como SQL Injection, uso de hashing inseguro (MD5) y exposición de datos sensibles.  
+También se identifican malas prácticas relacionadas con encapsulación, manejo de recursos y principios de Clean Code.  
+Se recomienda refactorización prioritaria enfocada en seguridad y aplicación de principios SOLID.
