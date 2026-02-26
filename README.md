@@ -64,7 +64,7 @@ Se recomienda refactorización prioritaria enfocada en seguridad y aplicación d
 
 🧪 FASE 3 — Pruebas Funcionales
 
-Se realizaron pruebas manuales enviando solicitudes HTTP mediante curl contra la API levantada en http://localhost:8080.
+Se realizaron pruebas manuales enviando solicitudes HTTP mediante curl contra la API en http://localhost:8080.
 
 🔎 Prueba 1 — Login válido
 
